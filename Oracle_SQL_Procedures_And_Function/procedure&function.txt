@@ -1,0 +1,52 @@
+create or replace package employee as
+	PROCEDURE insert_employee (
+	empno emp.eno%TYPE,
+	empname emp.ename%TYPE,
+	empsal emp.salary%TYPE,
+	depart emp.dept%TYPE
+	);
+	FUNCTION search_employee (
+    	empno emp.eno%TYPE
+	) RETURN varchar;
+	FUNCTION search_employee (
+    	empnam emp.ename%TYPE
+	) RETURN varchar;
+End employee;
+
+
+create or replace package body employee as
+   PROCEDURE insert_employee(
+   empno emp.eno%TYPE,
+   empname emp.ename%TYPE,
+   empsal emp.salary%TYPE,
+   depart emp.dept%TYPE
+   )
+   is
+   begin
+   insert into emp(eno, ename, salary, dept) values(empno, empname, empsal, depart);
+   End insert_employee;
+   FUNCTION search_employee(
+   empno emp.eno%TYPE
+   ) RETURN VARCHAR
+   is
+   empid emp.eno%TYPE;
+   empname emp.ename%TYPE;
+   empsal emp.salary%TYPE;
+   depart emp.dept%TYPE;
+   BEGIN
+   SELECT eno,ename,salary,dept INTO empid,empname,empsal,depart from emp where eno = empno;
+   RETURN (empid || ' | ' || empname || ' | ' || empsal || ' | ' || depart);
+   END search_employee;
+   FUNCTION search_employee(
+   empnam emp.ename%TYPE
+   ) RETURN VARCHAR
+   is
+   empid emp.eno%TYPE;
+   empname emp.ename%TYPE;
+   empsal emp.salary%TYPE;
+   depart emp.dept%TYPE;
+   BEGIN
+   SELECT eno,ename,salary,dept INTO empid,empname,empsal,depart from emp where lower(ename) = lower(empnam);
+   RETURN (empid || ' | ' || empname || ' | ' || empsal || ' | ' || depart);
+   END search_employee;
+End employee;
